@@ -1,6 +1,6 @@
 from collections import namedtuple
 from math import floor
-from typing import Tuple
+from typing import Tuple, Optional
 
 def swap(l: list, a: int, b: int):
     t = l[a]
@@ -23,16 +23,16 @@ class BinaryHeap():
     def _get_parent(self, index: int) -> "BinaryHeap.Node":
         return self.data[self._get_parent_index(index)]
 
-    def _get_children_index(self, index: int) -> Tuple[int, int]:
+    def _get_children_index(self, index: int) -> Tuple[Optional[int], Optional[int]]:
         a = index * 2 + 1 if (index * 2 + 1) < len(self.data) else None
         b = index * 2 + 2 if (index * 2 + 2) < len(self.data) else None
         return a, b
 
-    def get_children(self, index: int) -> Tuple["BinaryHeap.Node", "BinaryHeap.Node"]:
+    def get_children(self, index: int) -> Tuple[Optional["BinaryHeap.Node"], Optional["BinaryHeap.Node"]]:
         a, b = self._get_children_index(index)
         return self.data[a] if a is not None else None, self.data[b] if b is not None else None
 
-    def _is_leaf(self, index: int):
+    def _is_leaf(self, index: int) -> bool:
         return 2 * index > len(self.data)
 
     def _heapify(self, index: int):
