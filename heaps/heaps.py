@@ -15,7 +15,7 @@ class BinaryHeap():
         self.data = []
 
     def __repr__(self):
-        return f"BinaryHeap size {len(self.data)} max: {self.get_max()[0]} - {self.data}"
+        return f"BinaryHeap size {len(self.data)} max: {self.max[0]} - {self.data}"
     
     def _get_parent_index(self, index: int) -> int:
         return int(floor(index / 2))
@@ -54,7 +54,8 @@ class BinaryHeap():
             swap(self.data, c2_i, index)
             self._heapify(c2_i)
 
-    def get_max(self):
+    @property
+    def max(self):
         if not self.data:
             return None, None
         return self.data[0].key, self.data[0].value
