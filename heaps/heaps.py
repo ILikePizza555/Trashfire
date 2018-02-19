@@ -1,6 +1,6 @@
 from collections import namedtuple
 from math import floor
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Any
 
 def swap(l: list, a: int, b: int):
     t = l[a]
@@ -36,31 +36,31 @@ class BinaryHeap():
         return 2 * index > len(self.data)
 
     def _heapify(self, index: int):
+        # If the current node is a leaf, we are done
         if self._is_leaf(index):
             return
         
-        n = self.data[index]
-        c1, c2 = self.get_children(index)
-        if c1.key < n.key and c2.key < n.key:
-            return
+        # Pull data
+        n = self.data[index]                            # n is the current node at index
+        c1, c2 = self.get_children(index)               # c1 and c2 are the children of n
+        c1_i, c2_i = self._get_children_index(index)    # c1_i and c2_i are the indexes of c1 and c2
         
-        # Get children indexes
-        c1_i, c2_i = self._get_children_index(index)
-        if c1.key > n.key:
+        # Heapify children is needed
+        if c1 is not None and c1.key > n.key:
             swap(self.data, c1_i, index)
             self._heapify(c1_i)
 
-        if c2.key > n.key:
+        if c2 is not None and c2.key > n.key:
             swap(self.data, c2_i, index)
             self._heapify(c2_i)
 
     @property
-    def max(self):
+    def max(self) -> Tuple[int, Any]:
         if not self.data:
             return None, None
         return self.data[0].key, self.data[0].value
 
-    def insert(self, key, item):
+    def insert(self, key: int, item: Any):
         #Insert at the end of the heap
         n = BinaryHeap.Node(key, item)
         self.data.append(n)
@@ -75,3 +75,10 @@ class BinaryHeap():
             # Recalculate indexes
             index = parent_index
             parent_index = self._get_parent_index(index)
+
+    def pop_max(self) -> Tuple[int, Any]:
+        rv = self.max
+        swap(self.data, 0, -1)
+        del self.data[-1]
+        self._heapify(0)
+        return rv
