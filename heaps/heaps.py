@@ -33,7 +33,7 @@ class BinaryHeap():
         return self.data[a] if a is not None else None, self.data[b] if b is not None else None
 
     def _is_leaf(self, index: int) -> bool:
-        return 2 * index > len(self.data)
+        return 2 * index + 1 >= len(self.data)
 
     def _heapify(self, index: int):
         # If the current node is a leaf, we are done
@@ -44,13 +44,23 @@ class BinaryHeap():
         n = self.data[index]                            # n is the current node at index
         c1, c2 = self.get_children(index)               # c1 and c2 are the children of n
         c1_i, c2_i = self._get_children_index(index)    # c1_i and c2_i are the indexes of c1 and c2
+
+        # Find the max of the children
+        # If one of the children doesn't exist, then because this node isn't a leaf, the other child is the max
+        if c1 is None:
+            swap(self.data, c2_i, index)
+            self._heapify(c2_i)
+            return
         
-        # Heapify children is needed
-        if c1 is not None and c1.key > n.key:
+        if c2 is None:
             swap(self.data, c1_i, index)
             self._heapify(c1_i)
+            return
 
-        if c2 is not None and c2.key > n.key:
+        if c1.key > c2.key and n.key < c1.key:
+            swap(self.data, c1_i, index)
+            self._heapify(c1_i)
+        elif c2.key >= c1.key and n.key < c2.key:
             swap(self.data, c2_i, index)
             self._heapify(c2_i)
 

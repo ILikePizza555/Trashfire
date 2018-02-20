@@ -22,3 +22,16 @@ class BinaryHeapTest(unittest.TestCase):
 
         a.insert(89, "g")
         self.assertEqual(a.max, (89, "g"))
+
+    def test_pop_max(self):
+        a = BinaryHeap()
+        a.insert(1, "b")
+        a.insert(7, "c")
+        a.insert(29, "d")
+        a.insert(10, "e")
+        a.insert(4, "f")
+        a.insert(89, "g")
+
+        for expected in [89, 29, 10, 7, 4, 1]:
+            actual = a.pop_max()
+            self.assertEquals(actual[0], expected)
