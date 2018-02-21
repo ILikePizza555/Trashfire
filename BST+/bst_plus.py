@@ -17,7 +17,19 @@ class BSTNode():
     def is_leaf(self) -> bool:
         return self.left is None and self.right is None
 
-    def find_min(self):
+    def find(self, k: int) -> "BSTNode":
+        if k == self.key:
+            return self
+
+        if k < self.key:
+            return self.left.find(k)
+        
+        if k > self.key:
+            return self.right.find(k)
+
+        raise KeyError()
+
+    def find_min(self) -> int:
         if self.left is None:
             return self.key
         
@@ -71,3 +83,16 @@ def delete(x: int, t: BSTNode):
     t.right = delete(t.key, t.right)
     # Finally, return
     return t
+
+def range(a: int, b: int, t: BSTNode) -> int:
+    node_a = t.find(a)
+    node_b = t.find(b)
+
+    if a < t.key and b < t.key:
+        total = t.left_size
+    elif b < t.key and b < t.key:
+        total = t.right_size
+    else:
+        total = t.left_size + t.right_size + 1
+    
+    return total - node_a.left_size - node_b.right_size
