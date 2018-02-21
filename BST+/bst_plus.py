@@ -54,7 +54,7 @@ def delete(x: int, t: BSTNode):
         return t
 
     # Deletion phase
-    if t.is_leaf:
+    if t.is_leaf():
         return None
     
     # Single-child cases
