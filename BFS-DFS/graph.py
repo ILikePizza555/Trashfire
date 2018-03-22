@@ -2,7 +2,7 @@
 Module contains some classes for both weighted and unweighted graphs, which are essentially just a set of nodes that connect to each other.
 """
 from collections import namedtuple
-from typing import Dict, Set, Any, Generic, TypeVar
+from typing import Dict, Set, Tuple, Any, Generic, TypeVar
 
 N = TypeVar("N")
 class Graph(Generic[N]):
@@ -40,3 +40,25 @@ class Graph(Generic[N]):
     def delete_edge(self, k1: N, k2: N):
         self._adjlist[k1].remove(k2)
         self._adjlist[k2].remove(k1)
+
+class WeightedGraph(Graph[N]):
+    def __init__(self, adjlist: Dict[N, Set[Tuple[int, N]]] = {}):
+        self._adjlist = adjlist
+    
+    def get_weight(self, k1: N, k2: N):
+        for w, v in self._adjlist[k1]:
+            if v == k2:
+                return w
+        raise KeyError
+
+    def insert_edge(self, key: N, neighbors: Set[Tuple[int, N]]):
+        if key in self._adjlist:
+            self._adjlist[key] |= neighbors
+        else:
+            self._adjlist[key] = neighbors
+
+        for w, v in neighbors:
+            if v not in self._adjlist:
+                self._adjlist[v] = {(w, key)}
+            else:
+                self._adjlist[v].add((w, key))
