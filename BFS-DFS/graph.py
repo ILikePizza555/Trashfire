@@ -36,3 +36,7 @@ class Graph(Generic[N]):
                 self._adjlist[v] = {key}
             else:
                 self._adjlist[v].add(key)
+
+    def delete_edge(self, k1: N, k2: N):
+        self._adjlist[k1].remove(k2)
+        self._adjlist[k2].remove(k1)

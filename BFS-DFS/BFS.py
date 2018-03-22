@@ -12,7 +12,7 @@ class BFSColors(Enum):
 
 def BFS(g: Graph, v):
     queue = Queue()
-    parent = dict()
+    parent = {v: None}
     dist = {v: 0}
     visted = dict()
 
@@ -35,3 +35,16 @@ def BFS(g: Graph, v):
     # And, x, parent[x], parent[parent[x]], ..., v is the shortest path from x to v
 
     return dist, parent
+
+def path_exists(parent, x):
+    if x == None:
+        return True
+    
+    try:
+        return path_exists(parent, parent[x])
+    except KeyError:
+        return False
+
+def find_cycle_with_edge(g: Graph, e: tuple):
+    e1, e2 = e
+
