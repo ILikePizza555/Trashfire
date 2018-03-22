@@ -19,7 +19,6 @@ def BFS(g: Graph, v):
     queue.put(v)
     visted[v] = BFSColors.GREY
 
-    # Loop invariant:
     while not queue.empty():
         u = queue.get()
         visted[u] = BFSColors.BLACK
