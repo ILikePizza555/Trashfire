@@ -1,0 +1,9 @@
+{
+  "name": "BinaryTrees",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/d3": "^5.7.2"
+  }
+}
