@@ -7,7 +7,7 @@ namespace DataStructures {
          * Inserts an item into the tree.
          * @param item 
          */
-        insert(item: unknown): void;
+        insert(item: T | TreeNode<T>): void;
 
         /**
          * Removes child i from the tree.
@@ -15,4 +15,6 @@ namespace DataStructures {
          */
         deleteChild(i: number): void;
     }
+
+
 }
