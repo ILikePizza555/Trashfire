@@ -14,7 +14,7 @@ function dataToTree<T, TN extends DataStructures.TreeNode<T>>(
     return t(h);
 }
 
-function update(data: any): void {
+function update(data: any, nodeRadius: number = 25): void {
     /**
      * The SVG Canvas
      */
@@ -23,7 +23,12 @@ function update(data: any): void {
         .attr("width", "500")
         .attr("height", "500");
 
-    const layoutRoot = dataToTree(data, d3.tree<DataStructures.BSTNode<number>>().size([500, 500]));
+    const layoutRoot = dataToTree(
+        data, 
+        d3.tree<DataStructures.BSTNode<number>>()
+            .nodeSize([nodeRadius, nodeRadius])
+            .size([1000, 1000])
+    );
 
     /**
      * The nodes of the tree.
@@ -40,7 +45,7 @@ function update(data: any): void {
     groups.append("circle").join("circle")
         .attr("fill", "none")
         .attr("stroke", "black")
-        .attr("r", 25);
+        .attr("r", nodeRadius);
     groups.append("text").join("text")
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle")
