@@ -28,12 +28,23 @@ export namespace DataStructures {
         }
 
         set left(child: BSTNode<T>) {
-            if(!this._comparator(value))
+            if(this._comparator(child._value, this._value) === 1) {
+                throw new Error("Invalid left child.")
+            }
+
             this._children[0] = child;
         }
 
         get right(): BSTNode<T> {
             return this._children[1];
+        }
+
+        set right(child: BSTNode<T>) {
+            if(this._comparator(child.value, this._value) <= 0) {
+                throw new Error("Invalid right child.")
+            }
+
+            this._children[1] = child;
         }
 
         insert(value: T) {
