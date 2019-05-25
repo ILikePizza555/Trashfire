@@ -2,10 +2,12 @@ import {DataStructures} from "./Node";
 import {Selection} from "d3";
 import * as d3 from "d3";
 
-function dataToTree<T>(node: DataStructures.TreeNode<T>, 
-                       t: d3.TreeLayout<DataStructures.TreeNode<T>> = d3.tree<DataStructures.TreeNode<T>>()): d3.HierarchyPointNode<DataStructures.TreeNode<T>> {
-    function children(d: DataStructures.TreeNode<T>):  DataStructures.TreeNode<T>[] {
-        return d.children.filter(v => v !== null) as DataStructures.BSTNode<T>[];
+function dataToTree<T, TN extends DataStructures.TreeNode<T>>(
+    node: TN, 
+    t: d3.TreeLayout<TN> = d3.tree<TN>()): d3.HierarchyPointNode<TN> {
+    
+    function children(d: TN): TN[] {
+        return d.children.filter(v => v !== null) as TN[];
     }
 
     const h = d3.hierarchy(node, children);
