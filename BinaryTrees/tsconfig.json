@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "strict": true,
+        "target": "es5",
+        "module": "system",
         "lib": ["es2015", "dom"],
         "sourceMap": true,
         "outFile": "bundle.js"
