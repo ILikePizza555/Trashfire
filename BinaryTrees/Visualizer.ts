@@ -14,30 +14,39 @@ function dataToTree<T, TN extends DataStructures.TreeNode<T>>(
     return t(h);
 }
 
+function update(data: any): void {
+    /**
+     * The SVG Canvas
+     */
+    const d3svg = d3.select("#tree-display")
+        .append("svg")
+        .attr("width", "500")
+        .attr("height", "500");
+
+    const layoutRoot = dataToTree(data, d3.tree<DataStructures.BSTNode<number>>().size([500, 500]));
+
+    /**
+     * The nodes of the tree.
+     */
+    const tree = d3svg.selectAll<SVGGElement, {}>("g .node")
+        .data(layoutRoot.descendants());
+
+    const groups = tree.enter()
+        .append("g")
+        .attr("class", "node")
+        .merge(tree)
+        .attr("transform", d => `translate(${d.x}, ${d.y})`)
+
+    groups.append("circle").join("circle")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("r", 25);
+    groups.append("text").join("text")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .text(d => d.data.value)
+}
+
 const data: DataStructures.BSTNode<number> = new DataStructures.BSTNode(20);
 Array.from({length: 40}, (x, i) => i).forEach(v => data.insert(v));
-
-/**
- * The SVG Canvas
- */
-const d3svg = d3.select("#tree-display")
-    .append("svg")
-    .attr("width", "500")
-    .attr("height", "500");
-
-const layoutRoot = dataToTree(data, d3.tree<DataStructures.BSTNode<number>>().size([500, 500]));
-
-/**
- * The nodes of the tree.
- */
-const nodes = d3svg.selectAll<SVGCircleElement, {}>("circle .node")
-    .data(layoutRoot.descendants());
-
-nodes.enter()
-        .append("circle")
-        .attr("class", "node")
-        .attr("r", 2.5)
-    .merge(nodes)
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y)
-        .attr("r", 2.5)
+update(data);
