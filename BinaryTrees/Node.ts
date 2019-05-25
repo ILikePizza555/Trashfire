@@ -7,7 +7,15 @@ export function defaultComparator(a: any, b: any): -1 | 0 | 1{
 }
 
 export namespace DataStructures {
-    class BSTNode<T> {
+    interface TreeNode<T> {
+        readonly value: T;
+        readonly children: TreeNode<T>[];
+        insert(value: T);
+        remove(child: number);
+        height(): number;
+    }
+
+    class BSTNode<T> implements TreeNode<T> {
         private _tag = "BSTNode";
         private _value: T;
         private _children: [BSTNode<T> | null, BSTNode<T> | null];
@@ -17,6 +25,10 @@ export namespace DataStructures {
             this._value = value;
             this._comparator = comparator;
             this._children = [null, null];
+        }
+
+        get children() {
+            return this._children;
         }
 
         get value(): T {
