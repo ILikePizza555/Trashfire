@@ -68,5 +68,11 @@ export namespace DataStructures {
         remove(child: 0 | 1) {
             this._children[child] = this._children[child]._children[child];
         }
+
+        height(): number {
+            const leftHeight = this.left ? this.left.height() : 0;
+            const rightHeight = this.right ? this.right.height() : 0;
+            return leftHeight + rightHeight + 1;
+        }
     }
 }
