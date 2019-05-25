@@ -7,16 +7,22 @@ export function defaultComparator(a: any, b: any): -1 | 0 | 1{
 }
 
 export namespace DataStructures {
-    interface TreeNode<T> {
+    export interface TreeNode<T> {
         readonly _tag: string;
         readonly value: T;
         readonly children: (TreeNode<T> | null)[];
         insert(value: T): void;
         remove(child: number): void;
-        height(): number;
+        /**
+         * The number of elements under this node, including this node.
+         */
+        size(): number;
     }
 
-    class BSTNode<T> implements TreeNode<T> {
+    /**
+     * A basic binary search tree. Supports insertion and removal operations. 
+     */
+    export class BSTNode<T> implements TreeNode<T> {
         public readonly _tag = "BSTNode";
         private _value: T;
         private _children: [BSTNode<T> | null, BSTNode<T> | null];
@@ -85,9 +91,9 @@ export namespace DataStructures {
             }
         }
 
-        height(): number {
-            const leftHeight = this.left ? this.left.height() : 0;
-            const rightHeight = this.right ? this.right.height() : 0;
+        size(): number {
+            const leftHeight = this.left ? this.left.size() : 0;
+            const rightHeight = this.right ? this.right.size() : 0;
             return leftHeight + rightHeight + 1;
         }
     }
