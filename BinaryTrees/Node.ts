@@ -1,11 +1,19 @@
-namespace DataStructures {
+export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
+
+export function defaultComparator(a: any, b: any): -1 | 0 | 1{
+    if (a < b) {return -1;}
+    else if (a === b) {return 0;}
+    else return 1;
+}
+
+export namespace DataStructures {
     class BSTNode<T> {
         private _tag = "BSTNode";
         private _value: T;
         private _children: [BSTNode<T> | null, BSTNode<T> | null];
-        private _comparator: (a: T, b: T) => boolean;
+        private _comparator: Comparator<T>;
 
-        constructor(value: T, comparator = (a: any, b: any) => a < b) {
+        constructor(value: T, comparator = defaultComparator) {
             this._value = value;
             this._comparator = comparator;
             this._children = [null, null];
@@ -17,6 +25,11 @@ namespace DataStructures {
 
         get left(): BSTNode<T> {
             return this._children[0];
+        }
+
+        set left(child: BSTNode<T>) {
+            if(!this._comparator(value))
+            this._children[0] = child;
         }
 
         get right(): BSTNode<T> {
