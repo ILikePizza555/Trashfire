@@ -75,4 +75,8 @@ export namespace DataStructures {
             return leftHeight + rightHeight + 1;
         }
     }
+
+    function isBSTNode<T>(obj: any): obj is BSTNode<T> {
+        return obj._tag === "BSTNode";
+    }
 }
