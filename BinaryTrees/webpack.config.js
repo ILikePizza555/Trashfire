@@ -18,5 +18,8 @@ module.exports = {
         filename: "bundle.js",
         path: path.resolve(__dirname, "dist")
     },
+    externals: {
+        d3: "d3"
+    },
     devtool: "inline-source-map"
 }
