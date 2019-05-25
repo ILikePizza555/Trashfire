@@ -8,6 +8,7 @@ export function defaultComparator(a: any, b: any): -1 | 0 | 1{
 
 export namespace DataStructures {
     interface TreeNode<T> {
+        readonly _tag: string;
         readonly value: T;
         readonly children: TreeNode<T>[];
         insert(value: T);
@@ -16,7 +17,7 @@ export namespace DataStructures {
     }
 
     class BSTNode<T> implements TreeNode<T> {
-        private _tag = "BSTNode";
+        public readonly _tag = "BSTNode";
         private _value: T;
         private _children: [BSTNode<T> | null, BSTNode<T> | null];
         private _comparator: Comparator<T>;
