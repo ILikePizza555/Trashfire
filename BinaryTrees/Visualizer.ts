@@ -17,24 +17,25 @@ function dataToTree<T, TN extends DataStructures.TreeNode<T>>(
 const data: DataStructures.BSTNode<number> = new DataStructures.BSTNode(20);
 Array.from({length: 40}, (x, i) => i).forEach(v => data.insert(v));
 
-const layoutRoot = dataToTree(data);
-
 /**
  * The SVG Canvas
  */
 const d3svg = d3.select("#tree-display")
     .append("svg")
-    .attr("width", "50%")
-    .attr("height", "50%");
+    .attr("width", "500")
+    .attr("height", "500");
+
+const layoutRoot = dataToTree(data, d3.tree<DataStructures.BSTNode<number>>().size([500, 500]));
 
 /**
  * The nodes of the tree.
  */
-const nodes = d3svg.select("circle .node")
+const nodes = d3svg.selectAll<SVGCircleElement, {}>("circle .node")
     .data(layoutRoot.descendants());
 
 nodes.enter()
-        .append("circle .node #root")
+        .append("circle")
+        .attr("class", "node")
         .attr("r", 2.5)
     .merge(nodes)
         .attr("cx", d => d.x)
