@@ -10,9 +10,9 @@ export namespace DataStructures {
     interface TreeNode<T> {
         readonly _tag: string;
         readonly value: T;
-        readonly children: TreeNode<T>[];
-        insert(value: T);
-        remove(child: number);
+        readonly children: (TreeNode<T> | null)[];
+        insert(value: T): void;
+        remove(child: number): void;
         height(): number;
     }
 
@@ -36,24 +36,24 @@ export namespace DataStructures {
             return this._value;
         }
 
-        get left(): BSTNode<T> {
+        get left(): (BSTNode<T> | null) {
             return this._children[0];
         }
 
-        set left(child: BSTNode<T>) {
-            if(this._comparator(child._value, this._value) === 1) {
+        set left(child: (BSTNode<T> | null)) {
+            if(!child || this._comparator(child._value, this._value) === 1) {
                 throw new Error("Invalid left child.")
             }
 
             this._children[0] = child;
         }
 
-        get right(): BSTNode<T> {
+        get right(): (BSTNode<T> | null) {
             return this._children[1];
         }
 
-        set right(child: BSTNode<T>) {
-            if(this._comparator(child.value, this._value) <= 0) {
+        set right(child: (BSTNode<T> | null)) {
+            if(!child || this._comparator(child.value, this._value) <= 0) {
                 throw new Error("Invalid right child.")
             }
 
@@ -79,7 +79,10 @@ export namespace DataStructures {
         }
 
         remove(child: 0 | 1) {
-            this._children[child] = this._children[child]._children[child];
+            const c = this.children[child];
+            if(c !== null) {
+                this._children[child] = c._children[child];
+            }
         }
 
         height(): number {
