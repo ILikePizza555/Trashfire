@@ -50,14 +50,18 @@ export namespace DataStructures {
         insert(value: T) {
             const cmp = this._comparator(value, this._value);
 
-            if(cmp && !this.left) {
-                this._children[0] = new BSTNode(value, this._comparator);
-            } else if (cmp && this.left) {
-                this.left.insert(value);
-            } else if (!cmp && !this.right) {
-                this._children[1] = new BSTNode(value, this._comparator);
-            } else if (!cmp && this.right) {
-                this.right.insert(value);
+            if(cmp <= 0) {
+                if(!this.left) {
+                    this.left = new BSTNode(value, this._comparator);
+                } else {
+                    this.left.insert(value);
+                }
+            } else {
+                if(!this.right) {
+                    this.right = new BSTNode(value, this._comparator);
+                } else {
+                    this.right.insert(value);
+                }
             }
         }
 
