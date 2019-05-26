@@ -23,6 +23,11 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
     const layoutRoot = d3.tree<TN>()
             .nodeSize([nodeRadius, nodeRadius])
             .size(canvasSize)(treeLayoutData);
+
+    layoutRoot.each(node => {
+        node.x += 2 * nodeRadius;
+        node.y += 2 * nodeRadius;
+    });
     
     // The SVG element to hold the graph
     const d3svg = d3.select("svg#tree-display")
@@ -35,7 +40,7 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
         .join(
             enter => enter.append("g").attr("class", "node")
         )
-        .attr("transform", d => `translate(${d.x + 2 * nodeRadius}, ${d.y + 2 * nodeRadius})`);
+        .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
     nodes.append("circle")
         .join("circle")
