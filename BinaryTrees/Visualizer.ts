@@ -1,5 +1,5 @@
 import {DataStructures} from "./Node";
-import {Selection} from "d3";
+import {Selection, HierarchyPointNode} from "d3";
 import * as d3 from "d3";
 
 function dataToTree<T, TN extends DataStructures.TreeNode<T>>(node: TN): d3.HierarchyNode<TN> {
@@ -19,18 +19,15 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
         (nodeDiameter + 5) * treeLayoutData.leaves().length, 
         (nodeDiameter + 5) * treeLayoutData.height
     ];
-    
-    /**
-     * The SVG Canvas
-     */
-    const d3svg = d3.select("#tree-display")
-        .append("svg")
-        .attr("width", canvasSize[0] + 100)
-        .attr("height", canvasSize[1] + 100);
 
     const layoutRoot = d3.tree<TN>()
             .nodeSize([nodeRadius, nodeRadius])
             .size(canvasSize)(treeLayoutData);
+    
+    // The SVG element to hold the graph
+    const d3svg = d3.select("svg#tree-display")
+        .attr("width", canvasSize[0] + 100)
+        .attr("height", canvasSize[1] + 100);
 
     /**
      * The nodes of the tree.
