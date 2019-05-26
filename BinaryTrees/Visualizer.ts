@@ -35,6 +35,7 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
         .attr("height", canvasSize[1] + 100);
 
     
+    // Create all the elements for the nodes
     const nodes = d3svg.select("g#node-group").selectAll<SVGGElement, {}>("g .node")
         .data(layoutRoot.descendants())
         .join(
@@ -44,7 +45,7 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
 
     nodes.append("circle")
         .join("circle")
-        .attr("fill", "none")
+        .attr("fill", "white")
         .attr("stroke", "black")
         .attr("r", nodeRadius);
 
@@ -52,6 +53,16 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle")
         .text(d => (d.data.value).toString());
+    
+    // Create all the elements for the links
+    const links = d3svg.select("g#link-group").selectAll<SVGPathElement, {}>("path")
+            .data(layoutRoot.links())
+            .join("line")
+            .attr("stroke", "black")
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
 }
 
 const data: DataStructures.BSTNode<number> = new DataStructures.BSTNode(20);
