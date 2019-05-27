@@ -1,5 +1,4 @@
-import {DataStructures} from "./Node";
-import {Selection, HierarchyPointNode} from "d3";
+import {DataStructures} from "./DataStructures";
 import * as d3 from "d3";
 
 function dataToTree<T, TN extends DataStructures.TreeNode<T>>(node: TN): d3.HierarchyNode<TN> {
@@ -69,5 +68,9 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
 }
 
 const data: DataStructures.BSTNode<number> = new DataStructures.BSTNode(20);
-Array.from({length: 40}, (x, i) => i).forEach(v => data.insert(v));
-update(data);
+Array.from({length: 19}, (_, i) => i).reverse().forEach(data.insert.bind(data))
+Array.from({length: 19}, (_, i) => 21 + i).forEach(data.insert.bind(data));
+
+const root: DataStructures.BSTNode<number> = new DataStructures.BSTNode(0);
+root.right = data;
+update(root);
