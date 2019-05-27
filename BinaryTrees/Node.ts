@@ -214,8 +214,12 @@ export namespace DataStructures {
     export function vineToTree<T>(root: BSTNode<T>, iterCb: IterCallback): void {
         function compress(root: BSTNode<T>, count: number): void {
             for(let i = 0; i < count; i++) {
-                root.right = leftRotate(root.right!);
-                root = root.right;
+                try {
+                    root.right = leftRotate(root.right!);
+                    root = root.right;
+                } catch (e) {
+                    console.error(e);
+                }
             }
         }
 
