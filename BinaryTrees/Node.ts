@@ -165,4 +165,37 @@ export namespace DataStructures {
 
         return pivot;
     }
+
+    /**
+     * Converts a tree to a right-vine. Part of the DSW algorithmn.
+     * @param root 
+     */
+    function toVine<T>(root: BSTNode<T>, callback: (tail: BSTNode<T>, next: BSTNode<T> | null) => void): void {
+        let tail = root;
+        let next = root.right;
+
+        while (next !== null) {
+            if(!next.left) {
+                tail = next;
+                next = next.right;
+            } else {
+                // Goal here is to make pivot the right of tail
+                const pivot = next.left;
+                next.left = pivot.right;
+                pivot.right = next;
+                next = pivot;
+                tail.right = pivot;
+            }
+
+            callback(tail, next);
+        }
+    }
+
+    /**
+     * Balances a binary tree using the Day-Stout-Warren algorithmn
+     * @param root 
+     */
+    export function balance<T>(root: BSTNode<T>) {
+
+    }
 }
