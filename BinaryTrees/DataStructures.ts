@@ -187,30 +187,6 @@ export namespace DataStructures {
         finished?: () => void
     }
 
-    /**
-     * Converts a tree to a right-vine. Part of the DSW algorithmn.
-     * @param root 
-     */
-    export function toVine<T>(tail: BSTNode<T>, next: BSTNode<T> | null, cb: VineCallback): void {
-        if (next != null) {
-            if(!next.left) {
-                const newTail = next;
-                const newNext = next.right;
-                cb.iter(() => toVine(newTail, newNext, cb));
-            } else {
-                // Goal here is to make pivot the right of tail
-                const pivot = next.left;
-                next.left = pivot.right;
-                pivot.right = next;
-                next = pivot;
-                tail.right = pivot;
-                cb.iter(() => toVine(tail, next, cb));
-            }
-        } else if(cb.finished) {
-            cb.finished();
-        }
-    }
-
     export function vineToTree<T>(root: BSTNode<T>, iterCb: IterCallback): void {
         function compress(root: BSTNode<T>, count: number): void {
             for(let i = 0; i < count; i++) {
