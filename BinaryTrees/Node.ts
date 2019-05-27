@@ -156,8 +156,21 @@ export namespace DataStructures {
      * Rotates the tree from the root with the left child as the pivot
      */
     export function leftRotate<T>(root: BSTNode<T>): BSTNode<T> {
-        if (!root.left) {
-            throw new Error("Cannot perform left rotate on null pivot");
+        if (!root.right) {
+            throw new Error("Cannot perform left rotate on null pivot.");
+        }
+
+        const pivot = root.right;
+
+        root.right = pivot.left;
+        pivot.left = root;
+
+        return pivot;
+    }
+
+    export function rightRotate<T>(root: BSTNode<T>): BSTNode<T> {
+        if(!root.left) {
+            throw new Error("Cannot perform right rotate on null privot.")
         }
 
         const pivot = root.left;
@@ -178,7 +191,7 @@ export namespace DataStructures {
      * Converts a tree to a right-vine. Part of the DSW algorithmn.
      * @param root 
      */
-    function toVine<T>(tail: BSTNode<T>, next: BSTNode<T> | null, cb: VineCallback): void {
+    export function toVine<T>(tail: BSTNode<T>, next: BSTNode<T> | null, cb: VineCallback): void {
         if (next != null) {
             if(!next.left) {
                 const newTail = next;
