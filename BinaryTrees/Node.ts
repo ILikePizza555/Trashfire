@@ -226,15 +226,24 @@ export namespace DataStructures {
         let size = root.size();
         const leaves = size + 1 - (Math.pow(2, Math.log2(size + 1)));
 
+        // while(size > 1) but async
+        function compressLoop() {
+            if(size > 1) {
+                const newSize = Math.floor(size / 2);
+                size = newSize;
+
+                iterCb(() => {
+                    compress(root, size);
+                    iterCb(compressLoop);
+                });
+            }
+        }
+
         iterCb(() => {
-            iterCb(compress.bind(null, root, leaves));
+            compress(root, leaves);
             size = size - leaves;
 
-            while (size > 1) {
-                const newSize = Math.floor(size / 2);
-                iterCb(compress.bind(null, root, newSize));
-                size = newSize;
-            }
+            iterCb(compressLoop);
         });
     }
 
