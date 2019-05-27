@@ -22,7 +22,7 @@ module.exports = {
         d3: "d3"
     },
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
+        publicPath: "/dist/",
         compress: true,
     },
     devtool: "inline-source-map"
