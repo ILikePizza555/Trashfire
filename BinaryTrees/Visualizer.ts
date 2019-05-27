@@ -41,6 +41,9 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
         .join(
             enter => enter.append("g").attr("class", "node")
         )
+    
+    nodes
+        .transition()
         .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
     nodes.append("circle")
