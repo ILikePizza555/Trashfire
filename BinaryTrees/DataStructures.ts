@@ -193,7 +193,7 @@ export namespace DataStructures {
     namespace BTree {
         export type TTTree<T> = TwoNode<T> | ThreeNode<T>;
 
-        export class TwoNode<T> {
+        export class TwoNode<T>{
             public readonly _tag = "BTree-TwoNode";
             private _value: T;
             private _children: [TTTree<T> | null, TTTree<T> | null];
@@ -218,10 +218,6 @@ export namespace DataStructures {
             remove(child: number) {
 
             }
-
-            each(): void {}
-
-            eachDepth(): void  {}
 
             size(): number {
                 return 0;
@@ -255,10 +251,6 @@ export namespace DataStructures {
             insert() {}
 
             remove() {}
-
-            each() {}
-
-            eachDepth() {}
 
             size() { return 0;}
         }
