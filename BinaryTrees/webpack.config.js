@@ -21,5 +21,9 @@ module.exports = {
     externals: {
         d3: "d3"
     },
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+    },
     devtool: "inline-source-map"
 }
