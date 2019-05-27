@@ -58,7 +58,7 @@ function update<T, TN extends DataStructures.TreeNode<T>>(data: TN, nodeRadius: 
         .text(d => (d.data.value).toString());
     
     // Create all the elements for the links
-    const links = d3svg.select("g#link-group").selectAll<SVGPathElement, {}>("path")
+    const links = d3svg.select("g#link-group").selectAll<SVGPathElement, {}>("line")
             .data(layoutRoot.links())
             .join("line")
             .attr("stroke", "black")
