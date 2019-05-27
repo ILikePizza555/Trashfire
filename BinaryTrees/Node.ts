@@ -98,14 +98,14 @@ export namespace DataStructures {
         }
     }
 
-    function isBSTNode<T>(obj: any): obj is BSTNode<T> {
+    export function isBSTNode<T>(obj: any): obj is BSTNode<T> {
         return obj._tag === "BSTNode";
     }
 
     /**
      * Rotates the tree from the root with the left child as the pivot
      */
-    function leftRotate<T>(root: BSTNode<T>): BSTNode<T> {
+    export function leftRotate<T>(root: BSTNode<T>): BSTNode<T> {
         if (!root.left) {
             throw new Error("Cannot perform left rotate on null pivot");
         }
