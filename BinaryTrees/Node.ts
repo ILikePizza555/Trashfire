@@ -73,7 +73,7 @@ export namespace DataStructures {
         }
 
         set right(child: (BSTNode<T> | null)) {
-            if(child && this._comparator(child.value, this._value) <= 0) {
+            if(child && this._comparator(child.value, this._value) === -1) {
                 throw new Error("Invalid right child.")
             }
 
