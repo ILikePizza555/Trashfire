@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
     entry: "./Visualizer.ts",
     resolve: {
-        extensions: [".ts", "js"]
+        extensions: [".ts", ".js"]
     },
     module: {
         rules: [
