@@ -48,11 +48,15 @@ export namespace BST {
          */
         async function compress(root: BSTNode<T>, count: number) {
             for(let i = 0; i < count; i++) {
-                if(root.right) {
-                    root.right = DataStructures.leftRotate(root.right);
-                    root = root.right;
-                } else {
-                    console.warn(`root.right is null [count: ${count}, i: ${i}]`)
+                try {
+                    if(root.right) {
+                        root.right = DataStructures.leftRotate(root.right);
+                        root = root.right;
+                    } else {
+                        console.warn(`root.right is null [count: ${count}, i: ${i}]`);
+                    }
+                } catch (e) {
+                    console.error(`Got error "${e}". [count: ${count}, i: ${i}]`);
                 }
 
                 await cb.onCompress(root, count, i);
