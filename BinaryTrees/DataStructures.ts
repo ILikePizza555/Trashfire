@@ -1,5 +1,3 @@
-import { callbackify } from "util";
-
 export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
 export function defaultComparator(a: any, b: any): -1 | 0 | 1{
@@ -187,5 +185,75 @@ export namespace DataStructures {
      */
     export function balance<T>(root: BSTNode<T>) {
 
+    }
+
+    namespace BTree {
+        export type TTTree<T> = TwoNode<T> | ThreeNode<T>;
+
+        export class TwoNode<T> {
+            public readonly _tag = "BTree-TwoNode";
+            private _value: T;
+            private _children: [TTTree<T> | null, TTTree<T> | null];
+
+            constructor(value: T) {
+                this._value = value;
+                this._children = [null, null];
+            }
+
+            get value(): T {
+                return this._value;
+            }
+
+            get children() {
+                return this._children;
+            }
+
+            insert(value: T) {
+
+            }
+
+            remove(child: number) {
+
+            }
+
+            each(): void {}
+
+            eachDepth(): void  {}
+
+            size(): number {
+                return 0;
+            }
+        }
+
+        export class ThreeNode<T> {
+            public readonly _tag = "BTree-ThreeNode";
+            private _leftValue: T;
+            private _rightValue: T;
+            private _children: [TTTree<T> | null, TTTree<T> | null, TTTree<T> | null];
+
+            constructor(left: T, right: T) {
+                this._leftValue = left;
+                this._rightValue = right;
+                this._children = [null, null, null];
+            }
+
+            get value(): [T, T] {
+                return [this._leftValue, this._rightValue];
+            }
+
+            get children() {
+                return this._children;
+            }
+
+            insert() {}
+
+            remove() {}
+
+            each() {}
+
+            eachDepth() {}
+
+            size() { return 0;}
+        }
     }
 }
