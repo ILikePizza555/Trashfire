@@ -21,20 +21,14 @@ export namespace DataStructures {
         /**
          * Breath-first traversal of the tree. Assume that the traversal is in order.
          */
-        each(consumer: (t: T, i: number) => void): void;
+        each(consumer: (t: T, i?: number) => void): void;
 
-        /**
-         * Creates a new tree my appling a mapping function to a breath-first traversal of the tree.
-         */
-        map<R>(f: (t: T, i?: number) => R): TreeNode<R>;
 
         /**
          * Depth-first traversal of the tree.
          * @param consumer 
          */
-        eachDepth(consumer: (t: T, d: number) => void): void;
-
-        eachMap<R>(f: (t: T, d: number) => void): TreeNode<R>;
+        eachDepth(consumer: (t: T, d?: number) => void): void;
     }
 
     /**
@@ -106,6 +100,42 @@ export namespace DataStructures {
             const c = this.children[child];
             if(c !== null) {
                 this._children[child] = c._children[child];
+            }
+        }
+
+        private _each<R>(consumer: (t: T, i?: number) => void, i: number = 0 ): number {
+            if(this._children[0]) {
+                i += this._children[0]._each(consumer, i);
+            }
+
+            consumer(this._value, i);
+            i++;
+
+            if(this._children[1]) {
+                i += this._children[1]._each(consumer, i);
+            }
+            return i;
+        }
+
+        each(consumer: (t: T, i?: number) => void): void {
+            this._each(consumer);
+        }
+
+        eachDepth(consumer: (t: T, d?: number) => void): void {
+            const dfsQueue: [number, BSTNode<T>][] = [[0, this]];
+
+            while (dfsQueue.length != 0) {
+                const [depth, node] = dfsQueue.shift()!;
+
+                consumer(node._value, depth);
+
+                if(node._children[0]) { 
+                    dfsQueue.push([depth + 1, node._children[0]]); 
+                }
+
+                if(node._children[1]) { 
+                    dfsQueue.push([depth + 1, node._children[1]]);
+                }
             }
         }
 
