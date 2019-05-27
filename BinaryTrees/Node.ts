@@ -181,11 +181,11 @@ export namespace DataStructures {
         return pivot;
     }
 
+    type IterCallback = (next: () => void) => void;
     type VineCallback = {
-        iter: (next: () => void ) => void,
+        iter: IterCallback,
         finished?: () => void
     }
-    type NodeCallback<T> = (node: BSTNode<T>) => void;
 
     /**
      * Converts a tree to a right-vine. Part of the DSW algorithmn.
@@ -208,6 +208,26 @@ export namespace DataStructures {
             }
         } else if(cb.finished) {
             cb.finished();
+        }
+    }
+
+    export function vineToTree<T>(root: BSTNode<T>): void {
+        function compress(root: BSTNode<T>, count: number): void {
+            for(let i = 0; i < count; i++) {
+                root.right = leftRotate(root.right!);
+                root = root.right;
+            }
+        }
+
+        let size = root.size();
+        const leaves = size + 1 - (Math.pow(2, Math.log2(size + 1)));
+        compress(root, leaves);
+        size = size - leaves;
+
+        while (size > 1) {
+            const newSize = Math.floor(size / 2);
+            compress(root, newSize);
+            size = newSize;
         }
     }
 
