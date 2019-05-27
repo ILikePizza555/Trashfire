@@ -47,7 +47,7 @@ export namespace DataStructures {
         }
 
         set left(child: (BSTNode<T> | null)) {
-            if(!child || this._comparator(child._value, this._value) === 1) {
+            if(child && this._comparator(child._value, this._value) === 1) {
                 throw new Error("Invalid left child.")
             }
 
@@ -59,7 +59,7 @@ export namespace DataStructures {
         }
 
         set right(child: (BSTNode<T> | null)) {
-            if(!child || this._comparator(child.value, this._value) <= 0) {
+            if(child && this._comparator(child.value, this._value) <= 0) {
                 throw new Error("Invalid right child.")
             }
 
