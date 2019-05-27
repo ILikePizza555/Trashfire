@@ -1,5 +1,7 @@
 import {DataStructures} from "./DataStructures";
+import {BST} from "./VisualAlgorithmns";
 import * as d3 from "d3";
+import { resolve } from "path";
 
 function dataToTree<T, TN extends DataStructures.TreeNode<T>>(node: TN): d3.HierarchyNode<TN> {
     
@@ -74,3 +76,23 @@ Array.from({length: 19}, (_, i) => 21 + i).forEach(data.insert.bind(data));
 const root: DataStructures.BSTNode<number> = new DataStructures.BSTNode(0);
 root.right = data;
 update(root);
+
+function timeOut<T>(ms: number): Promise<T> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+Promise.all([
+    timeOut(3000),
+    BST.treeToVine(root, { 
+        onLoop: async () => {
+                await timeOut(200).then(() => update(root))
+            }
+        }).then(async vineRoot => {
+            console.info("Converting vine to tree");
+            
+            await BST.vineToTree(vineRoot, {
+                onCompress: async () => await timeOut(200).then(() => update(root)),
+                onLoop: async () => await timeOut(200).then(() => update(root))
+            });
+        }),
+]);
