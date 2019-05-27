@@ -181,48 +181,6 @@ export namespace DataStructures {
         return pivot;
     }
 
-    type IterCallback = (next: () => void) => void;
-    type VineCallback = {
-        iter: IterCallback,
-        finished?: () => void
-    }
-
-    export function vineToTree<T>(root: BSTNode<T>, iterCb: IterCallback): void {
-        function compress(root: BSTNode<T>, count: number): void {
-            for(let i = 0; i < count; i++) {
-                try {
-                    root.right = leftRotate(root.right!);
-                    root = root.right;
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        }
-
-        let size = root.size();
-        const leaves = size + 1 - (Math.pow(2, Math.log2(size + 1)));
-
-        // while(size > 1) but async
-        function compressLoop() {
-            if(size > 1) {
-                const newSize = Math.floor(size / 2);
-                size = newSize;
-
-                iterCb(() => {
-                    compress(root, size);
-                    iterCb(compressLoop);
-                });
-            }
-        }
-
-        iterCb(() => {
-            compress(root, leaves);
-            size = size - leaves;
-
-            iterCb(compressLoop);
-        });
-    }
-
     /**
      * Balances a binary tree using the Day-Stout-Warren algorithmn
      * @param root 
