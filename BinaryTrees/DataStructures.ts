@@ -7,17 +7,7 @@ export function defaultComparator(a: any, b: any): -1 | 0 | 1{
 }
 
 export namespace DataStructures {
-    export interface TreeNode<T> {
-        readonly _tag: string;
-        readonly value: T;
-        readonly children: (TreeNode<T> | null)[];
-        insert(value: T): void;
-        remove(child: number): void;
-        /**
-         * The number of elements under this node, including this node.
-         */
-        size(): number;
-
+    export interface Traversable<T> {
         /**
          * Breath-first traversal of the tree. Assume that the traversal is in order.
          */
@@ -29,6 +19,18 @@ export namespace DataStructures {
          * @param consumer 
          */
         eachDepth(consumer: (t: T, d?: number) => void): void;
+    }
+
+    export interface TreeNode<T> extends Traversable<T> {
+        readonly _tag: string;
+        readonly value: T;
+        readonly children: (TreeNode<T> | null)[];
+        insert(value: T): void;
+        remove(child: number): void;
+        /**
+         * The number of elements under this node, including this node.
+         */
+        size(): number;
     }
 
     /**
@@ -96,6 +98,7 @@ export namespace DataStructures {
             }
         }
 
+        // TODO: I'm pretty sure this is broken.
         remove(child: 0 | 1) {
             const c = this.children[child];
             if(c !== null) {
