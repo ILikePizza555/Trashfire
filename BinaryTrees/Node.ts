@@ -211,7 +211,7 @@ export namespace DataStructures {
         }
     }
 
-    export function vineToTree<T>(root: BSTNode<T>): void {
+    export function vineToTree<T>(root: BSTNode<T>, iterCb: IterCallback): void {
         function compress(root: BSTNode<T>, count: number): void {
             for(let i = 0; i < count; i++) {
                 root.right = leftRotate(root.right!);
@@ -221,14 +221,17 @@ export namespace DataStructures {
 
         let size = root.size();
         const leaves = size + 1 - (Math.pow(2, Math.log2(size + 1)));
-        compress(root, leaves);
-        size = size - leaves;
 
-        while (size > 1) {
-            const newSize = Math.floor(size / 2);
-            compress(root, newSize);
-            size = newSize;
-        }
+        iterCb(() => {
+            iterCb(compress.bind(null, root, leaves));
+            size = size - leaves;
+
+            while (size > 1) {
+                const newSize = Math.floor(size / 2);
+                iterCb(compress.bind(null, root, newSize));
+                size = newSize;
+            }
+        });
     }
 
     /**
