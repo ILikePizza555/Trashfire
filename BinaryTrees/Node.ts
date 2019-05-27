@@ -1,3 +1,5 @@
+import { callbackify } from "util";
+
 export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
 export function defaultComparator(a: any, b: any): -1 | 0 | 1{
@@ -166,18 +168,22 @@ export namespace DataStructures {
         return pivot;
     }
 
+    type VineCallback = {
+        iter: (next: () => void ) => void,
+        finished?: () => void
+    }
+    type NodeCallback<T> = (node: BSTNode<T>) => void;
+
     /**
      * Converts a tree to a right-vine. Part of the DSW algorithmn.
      * @param root 
      */
-    function toVine<T>(root: BSTNode<T>, callback: (tail: BSTNode<T>, next: BSTNode<T> | null) => void): void {
-        let tail = root;
-        let next = root.right;
-
-        while (next !== null) {
+    function toVine<T>(tail: BSTNode<T>, next: BSTNode<T> | null, cb: VineCallback): void {
+        if (next != null) {
             if(!next.left) {
-                tail = next;
-                next = next.right;
+                const newTail = next;
+                const newNext = next.right;
+                cb.iter(() => toVine(newTail, newNext, cb));
             } else {
                 // Goal here is to make pivot the right of tail
                 const pivot = next.left;
@@ -185,9 +191,10 @@ export namespace DataStructures {
                 pivot.right = next;
                 next = pivot;
                 tail.right = pivot;
+                cb.iter(() => toVine(tail, next, cb));
             }
-
-            callback(tail, next);
+        } else if(cb.finished) {
+            cb.finished();
         }
     }
 
