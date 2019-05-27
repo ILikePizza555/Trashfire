@@ -17,6 +17,24 @@ export namespace DataStructures {
          * The number of elements under this node, including this node.
          */
         size(): number;
+
+        /**
+         * Breath-first traversal of the tree. Assume that the traversal is in order.
+         */
+        each(consumer: (t: T, i: number) => void): void;
+
+        /**
+         * Creates a new tree my appling a mapping function to a breath-first traversal of the tree.
+         */
+        map<R>(f: (t: T, i?: number) => R): TreeNode<R>;
+
+        /**
+         * Depth-first traversal of the tree.
+         * @param consumer 
+         */
+        eachDepth(consumer: (t: T, d: number) => void): void;
+
+        eachMap<R>(f: (t: T, d: number) => void): TreeNode<R>;
     }
 
     /**
