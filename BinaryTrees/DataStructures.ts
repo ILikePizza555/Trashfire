@@ -225,6 +225,10 @@ export namespace DataStructures {
             }
         }
 
+        function isTwoNode<T>(obj: any): obj is TwoNode<T> {
+            return obj._tag === "BTree-TwoNode";
+        }
+
         export class ThreeNode<T> {
             public readonly _tag = "BTree-ThreeNode";
             private _leftValue: T;
@@ -254,6 +258,10 @@ export namespace DataStructures {
             eachDepth() {}
 
             size() { return 0;}
+        }
+
+        function isThreeNode<T>(obj: any): obj is ThreeNode<T> {
+            return obj._tag === "BTree-ThreeNode";
         }
     }
 }
