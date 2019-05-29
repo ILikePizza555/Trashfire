@@ -98,6 +98,9 @@ export namespace DataStructures {
             }
         }
 
+        /**
+         * Returns the smallest child node.
+         */
         getMinNode(): BSTNode<T>  {
             let rv: BSTNode<T> = this;
             while(rv._children[0]) {
@@ -106,11 +109,41 @@ export namespace DataStructures {
             return rv
         }
 
-        // TODO: I'm pretty sure this is broken.
-        remove(child: 0 | 1) {
-            const c = this.children[child];
-            if(c !== null) {
-                this._children[child] = c._children[child];
+        remove(childIndex: 0 | 1) {
+            const child = this._children[childIndex];
+
+            if(!child) {
+                throw new Error("Cannot delete non-existant child.");
+            }
+
+            // Child has no children
+            if(child._children[0] == null && child._children[1] == null) {
+                this._children[childIndex] = null;
+            }
+
+            // Child has one child
+            else if(child._children[0] != null && child._children[1] == null) {
+                this._children[childIndex] = child._children[0];
+            } else if(child._children[0] == null && child._children[1] != null) {
+                this._children[childIndex] = child._children[1];
+            } 
+            
+            // Child is full
+            else if(child._children[0] && child._children[1]) {
+                const successor = child._children[1].getMinNode();
+
+                // Find the parent of successor
+                let parent = child._children[1];
+                while(parent._children[0] && parent._children[0]._children[0]) {
+                    parent = child._children[0]
+                }
+
+                // Delete successor from it's parent
+                parent._children[0] = null;
+
+                // Replace child with successor
+                successor._children = child._children;
+                this._children[childIndex] = successor;
             }
         }
 
