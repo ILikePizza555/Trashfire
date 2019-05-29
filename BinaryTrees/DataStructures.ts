@@ -98,6 +98,14 @@ export namespace DataStructures {
             }
         }
 
+        getMinNode(): BSTNode<T>  {
+            let rv: BSTNode<T> = this;
+            while(rv._children[0]) {
+                rv = rv._children[0]
+            }
+            return rv
+        }
+
         // TODO: I'm pretty sure this is broken.
         remove(child: 0 | 1) {
             const c = this.children[child];
