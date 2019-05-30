@@ -295,15 +295,27 @@ export namespace DataStructures {
             private getNode(key: K) {
                 let n = this._root;
 
-                while(n.children.length != 0) {
+                while(n.children) {
                     const lcomp = this._comparator(key, n.keys[0]);
 
-                    if(isTwoNode(n) && n.children.length != 0) {
+                    if(isTwoNode(n) && n.children) {
                         if(lcomp <= 0) {
-                            
+                            n = n.children[0];
+                        } else {
+                            n = n.children[1];
+                        }
+                    } else if(isThreeNode(n) && n.children) {
+                        const rcomp = this._comparator(key, n.keys[1]);
+
+                        if(rcomp <= 0) {
+                            n = n.children[0]
+                        } else {
+                            n = n.children[1];
                         }
                     }
                 }
+
+                return n;
             }
         }
     }
