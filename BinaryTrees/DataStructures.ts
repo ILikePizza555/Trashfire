@@ -1,3 +1,5 @@
+import { namespace, keys } from "d3";
+
 export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
 export function defaultComparator(a: any, b: any): -1 | 0 | 1{
@@ -231,24 +233,56 @@ export namespace DataStructures {
 
     }
 
-    /**
-     * A BTree of order 3 (a 2-3 Tree)
-     * 
-     * Properties of a Two-Three Tree:
-     * - Every node is either a TwoNode or a ThreeNode
-     * - All leaves are at the same depth
-     * - All data is in sorted order.
-    */
-    export class BTree<K> {
-        private _keys: [K] | [K, K];
-        private _parent: BTree<K> | undefined;
-        private _children: [] | [BTree<K>, BTree<K>] | [BTree<K>, BTree<K>, BTree<K>] = []
-        private _comparator: Comparator<K>;
+    export namespace BTree {
 
-        constructor(key: K, comparator: Comparator<K>, parent?: BTree<K>) {
-            this._keys = [key];
-            this._comparator = comparator;
-            this._parent = parent;
+        class TwoNode<K> {
+            keys: [K];
+            parent: BTreeNode<K> | null;
+            children: [] | [BTreeNode<K>, BTreeNode<K>];
+
+            constructor(key: K, parent: BTreeNode<K> | null = null, children: [] | [BTreeNode<K>, BTreeNode<K>] = []) {
+                this.keys = [key];
+                this.parent = parent;
+                this.children = children;
+            }
+        }
+
+        class ThreeNode<K> {
+            keys: [K, K];
+            parent: BTreeNode<K> | null;
+            children: [] | [BTreeNode<K>, BTreeNode<K>, BTreeNode<K>];
+
+            constructor(keys: [K, K], 
+                parent: BTreeNode<K> | null = null, 
+                children: [] | [BTreeNode<K>, BTreeNode<K>, BTreeNode<K>] = []) {
+                    this.keys = keys;
+                    this.parent = parent;
+                    this.children = children;
+                }
+        }
+
+        type BTreeNode<K> = TwoNode<K> | ThreeNode<K>
+
+        function isTwoNode<K>(obj: BTreeNode<K>): obj is TwoNode<K> {
+            return obj.keys.length == 1;
+        }
+
+        function isThreeNode<K>(obj: BTreeNode<K>): obj is ThreeNode<K> {
+            return obj.keys.length == 2;
+        }
+
+        /**
+         * A BTree of order 3 (a 2-3 Tree)
+         * 
+         * Properties of a Two-Three Tree:
+         * - Every node is either a TwoNode or a ThreeNode
+         * - All leaves are at the same depth
+         * - All data is in sorted order.
+        */
+        export class BTree<K> {
+            private _root: BTreeNode<K>;
+
+
         }
     }
 }
