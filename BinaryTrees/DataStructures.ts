@@ -281,8 +281,12 @@ export namespace DataStructures {
         */
         export class BTree<K> {
             private _root: BTreeNode<K>;
+            private _comparator: Comparator<K>;
 
-
+            constructor(rootValue: K, comparator: Comparator<K> = defaultComparator) {
+                this._root = new TwoNode<K>(rootValue);
+                this._comparator = comparator;
+            }
         }
     }
 }
