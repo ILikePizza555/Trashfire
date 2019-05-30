@@ -231,73 +231,24 @@ export namespace DataStructures {
 
     }
 
-    namespace BTree {
-        export type TTTree<T> = TwoNode<T> | ThreeNode<T>;
+    /**
+     * A BTree of order 3 (a 2-3 Tree)
+     * 
+     * Properties of a Two-Three Tree:
+     * - Every node is either a TwoNode or a ThreeNode
+     * - All leaves are at the same depth
+     * - All data is in sorted order.
+    */
+    export class BTree<K> {
+        private _keys: [K] | [K, K];
+        private _parent: BTree<K> | undefined;
+        private _children: [] | [BTree<K>, BTree<K>] | [BTree<K>, BTree<K>, BTree<K>] = []
+        private _comparator: Comparator<K>;
 
-        export class TwoNode<T>{
-            public readonly _tag = "BTree-TwoNode";
-            private _value: T;
-            private _children: [TTTree<T> | null, TTTree<T> | null];
-
-            constructor(value: T) {
-                this._value = value;
-                this._children = [null, null];
-            }
-
-            get value(): T {
-                return this._value;
-            }
-
-            get children() {
-                return this._children;
-            }
-
-            insert(value: T) {
-
-            }
-
-            remove(child: number) {
-
-            }
-
-            size(): number {
-                return 0;
-            }
-        }
-
-        function isTwoNode<T>(obj: any): obj is TwoNode<T> {
-            return obj._tag === "BTree-TwoNode";
-        }
-
-        export class ThreeNode<T> {
-            public readonly _tag = "BTree-ThreeNode";
-            private _leftValue: T;
-            private _rightValue: T;
-            private _children: [TTTree<T> | null, TTTree<T> | null, TTTree<T> | null];
-
-            constructor(left: T, right: T) {
-                this._leftValue = left;
-                this._rightValue = right;
-                this._children = [null, null, null];
-            }
-
-            get value(): [T, T] {
-                return [this._leftValue, this._rightValue];
-            }
-
-            get children() {
-                return this._children;
-            }
-
-            insert() {}
-
-            remove() {}
-
-            size() { return 0;}
-        }
-
-        function isThreeNode<T>(obj: any): obj is ThreeNode<T> {
-            return obj._tag === "BTree-ThreeNode";
+        constructor(key: K, comparator: Comparator<K>, parent?: BTree<K>) {
+            this._keys = [key];
+            this._comparator = comparator;
+            this._parent = parent;
         }
     }
 }
