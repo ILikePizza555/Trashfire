@@ -1,4 +1,5 @@
 import { namespace, keys } from "d3";
+import { AssertionError } from "assert";
 
 export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
@@ -233,5 +234,34 @@ export namespace DataStructures {
 
     }
 
-    
+    class BTree<K> {
+        private _keys: K[] = [];
+        private _children: BTree<K>[] = [];
+        private _parent?: BTree<K> = undefined;
+        private _comparator: Comparator<K> = defaultComparator;
+
+        isLeaf(): boolean {
+            return this._children.length == 0;
+        }
+
+        insert(key: K): void{
+            if(this.isLeaf()) {
+                const newSize = this._keys.push(key);
+                this._keys.sort(this._comparator);
+            } else {
+                // Iterate through the keys to find the correct child to insert to.
+                for(let i = 0; i < this._keys.length; i += 1) {
+                    const k = this._keys[i];
+
+                    if(this._comparator(key, k) <= 0) {
+                        if(this._children[i] == undefined) {
+                            throw new Error(`Invalid State: _children[${i}] is undefined. Either this node has too many keys or not enough children. keys: ${this._keys.length}; children: ${this._children.length}`)
+                        }
+
+                        this._children[i].insert(k);
+                    }
+                }
+            }
+        }
+    }
 }
