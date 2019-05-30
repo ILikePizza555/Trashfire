@@ -238,9 +238,9 @@ export namespace DataStructures {
         class TwoNode<K> {
             keys: [K];
             parent: BTreeNode<K> | null;
-            children: [] | [BTreeNode<K>, BTreeNode<K>];
+            children: null | [BTreeNode<K>, BTreeNode<K>];
 
-            constructor(key: K, parent: BTreeNode<K> | null = null, children: [] | [BTreeNode<K>, BTreeNode<K>] = []) {
+            constructor(key: K, parent: BTreeNode<K> | null = null, children: null | [BTreeNode<K>, BTreeNode<K>] = null) {
                 this.keys = [key];
                 this.parent = parent;
                 this.children = children;
@@ -250,11 +250,11 @@ export namespace DataStructures {
         class ThreeNode<K> {
             keys: [K, K];
             parent: BTreeNode<K> | null;
-            children: [] | [BTreeNode<K>, BTreeNode<K>, BTreeNode<K>];
+            children: null | [BTreeNode<K>, BTreeNode<K>, BTreeNode<K>];
 
             constructor(keys: [K, K], 
                 parent: BTreeNode<K> | null = null, 
-                children: [] | [BTreeNode<K>, BTreeNode<K>, BTreeNode<K>] = []) {
+                children: null | [BTreeNode<K>, BTreeNode<K>, BTreeNode<K>] = null) {
                     this.keys = keys;
                     this.parent = parent;
                     this.children = children;
@@ -286,6 +286,24 @@ export namespace DataStructures {
             constructor(rootValue: K, comparator: Comparator<K> = defaultComparator) {
                 this._root = new TwoNode<K>(rootValue);
                 this._comparator = comparator;
+            }
+
+            /**
+             * Gets a node based on the key. If no node with the key exists, return the node where it would be inserted.
+             * @param key 
+             */
+            private getNode(key: K) {
+                let n = this._root;
+
+                while(n.children.length != 0) {
+                    const lcomp = this._comparator(key, n.keys[0]);
+
+                    if(isTwoNode(n) && n.children.length != 0) {
+                        if(lcomp <= 0) {
+                            
+                        }
+                    }
+                }
             }
         }
     }
