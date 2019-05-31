@@ -324,31 +324,26 @@ export namespace DataStructures {
                 }
             }
 
-            isLeaf(): boolean {
-                return this._children.length == 0;
-            }
-
             insert(key: K): void {
-                if (this.isLeaf()) {
-                    this._keys.push(key);
-                    this._keys.sort(this._comparator);
-                    this.fixOrder();
-                } else {
-                    // Iterate through the keys to find the correct child to insert to.
-                    for (let i = 0; i < this._keys.length - 1; i += 1) {
-                        const k = this._keys[i];
+                let n = this._root;
 
-                        if (this._comparator(key, k) <= 0) {
-                            if (this._children[i] == undefined) {
+                while(!n.isLeaf()) {
+                    for(let i=0; i < n._keys.length - 1; i+= 1) {
+                        const k = n._keys[i];
+
+                        if(this._comparator(key, k) <= 0) {
+                            if (n._children[i] == undefined) {
                                 throw new Error(`Invalid State: _children[${i}] is undefined. Either this node has too many keys or not enough children. keys: ${this._keys.length}; children: ${this._children.length}`)
                             }
-
-                            this._children[i].insert(key);
+                            n = n._children[i];
                         }
                     }
 
-                    this._children[this._children.length - 1].insert(key);
+                    n = n._children[n._children.length - 1];
                 }
+
+                n.insertKey(key, this._comparator);
+                this.fixOrder(n);
             }
         }
     }
