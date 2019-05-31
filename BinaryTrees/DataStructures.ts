@@ -281,31 +281,45 @@ export namespace DataStructures {
                 this._comparator = comparator;
             }
 
-        private fixOrder(beginningNode: Node<K>): void {
-            // Assert that the length of the children is either 0 or 1 more than the number of keys
-            if(this._children.length != 0 || this._children.length != this._keys.length + 1) {
-                throw new Error(`Invalid State: keys:${this._keys.length}, children:${this._children.length}`);
+            private replaceRoot(newRoot: BNode<K>) {
+                // Delete references so that nodes can be garbage-collected.
+                // idk if this actually helps, but better safe than sorry.
+                this._root._keys = [];
+                this._root._children = [];
+                this._root = newRoot;
             }
 
+            private fixOrder(n: BNode<K>): void {
+                // Assert that the length of the children is either 0 or 1 more than the number of keys
+                if (n._children.length != 0 || n._children.length != n._keys.length + 1) {
+                    throw new Error(`Invalid Node State: keys:${n._keys.length}, children:${n._children.length}`);
+                }
+
                 // Nothing to fix!
-                if (this._keys.length <= 2) {
+                if (n._keys.length <= 2) {
                     return;
                 }
 
-                if (this._keys.length == 3) {
+                if (n._keys.length == 3) {
                     // First we need to break ourselves apart
-                    const pushKey = this._keys[1];
-                    const leftNode = new BTree<K>([this._keys[0]], this._children.slice(0, 2), this._parent, this._comparator);
-                    const rightNode = new BTree<K>([this._keys[1]], this._children.slice(2, 4), this._parent, this._comparator);
+                    const pushKey = n._keys[1];
+                    const leftNode = new BNode<K>([n._keys[0]], n._children.slice(0, 2), n._parent);
+                    const rightNode = new BNode<K>([n._keys[1]], n._children.slice(2, 4), n._parent);
 
-                    if (!this._parent) {
+                    if (!n._parent) {
                         // Create a new parent, this is the new root;
-                        const parent = new BTree<K>([pushKey], [leftNode, rightNode], undefined, this._comparator);
-                        leftNode._parent = parent;
-                        rightNode._parent = parent
-                        return parent;
+                        const newRoot = new BNode<K>([pushKey], [leftNode, rightNode]);
+                        newRoot._parent = newRoot;
+                        newRoot._parent = newRoot;
+                        this.replaceRoot(newRoot);
                     } else {
+                        n._parent.removeChild(n);
+                        const index = n._parent.insertKey(pushKey, this._comparator);
 
+                        n._parent._children.splice(index, 0, leftNode);
+                        n._parent._children.splice(index + 1, 0, leftNode);
+
+                        this.fixOrder(n._parent);
                     }
                 }
             }
