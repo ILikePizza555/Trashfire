@@ -1,4 +1,4 @@
-import { namespace, keys } from "d3";
+import { namespace, keys, thresholdFreedmanDiaconis } from "d3";
 import { AssertionError } from "assert";
 
 export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
@@ -235,22 +235,63 @@ export namespace DataStructures {
     }
 
     class BTree<K> {
-        private _keys: K[] = [];
-        private _children: BTree<K>[] = [];
-        private _parent?: BTree<K> = undefined;
-        private _comparator: Comparator<K> = defaultComparator;
+        private _keys: K[];
+        private _children: BTree<K>[];
+        private _parent?: BTree<K>;
+        private _comparator: Comparator<K>;
+
+        constructor(keys: K[] = [], children: BTree<K>[] = [], parent?: BTree<K>, comparator: Comparator<K> = defaultComparator) {
+            this._keys = keys;
+            this._children = children;
+            this._parent = parent;
+            this._comparator = comparator;
+        }
+
+        private insertKey(key: K) {
+
+        }
+
+        private fixOrder(): BTree<K> | undefined {
+            // Assert that the length of the children is either 0 or 1 more than the number of keys
+            if(this._children.length != 0 || this._children.length != this._keys.length + 1) {
+                throw new Error(`Invalid State: keys:${this._keys.length}, children:${this._children.length}`);
+            }
+
+            // Nothing to fix!
+            if(this._keys.length <= 2) {
+                return;
+            }
+
+            if(this._keys.length == 3) {
+                // First we need to break ourselves apart
+                const pushKey = this._keys[1];
+                const leftNode = new BTree<K>([this._keys[0]], this._children.slice(0, 2), this._parent, this._comparator);
+                const rightNode = new BTree<K>([this._keys[1]], this._children.slice(2, 4), this._parent, this._comparator);
+
+                if(!this._parent) {
+                    // Create a new parent, this is the new root;
+                    const parent = new BTree<K>([pushKey], [leftNode, rightNode], undefined, this._comparator);
+                    leftNode._parent = parent;
+                    rightNode._parent = parent
+                    return parent;
+                } else {
+
+                }
+            }
+        }
 
         isLeaf(): boolean {
             return this._children.length == 0;
         }
 
-        insert(key: K): void{
+        insert(key: K): void {
             if(this.isLeaf()) {
-                const newSize = this._keys.push(key);
+                this._keys.push(key);
                 this._keys.sort(this._comparator);
+                this.fixOrder();
             } else {
                 // Iterate through the keys to find the correct child to insert to.
-                for(let i = 0; i < this._keys.length; i += 1) {
+                for(let i = 0; i < this._keys.length - 1; i += 1) {
                     const k = this._keys[i];
 
                     if(this._comparator(key, k) <= 0) {
@@ -258,9 +299,11 @@ export namespace DataStructures {
                             throw new Error(`Invalid State: _children[${i}] is undefined. Either this node has too many keys or not enough children. keys: ${this._keys.length}; children: ${this._children.length}`)
                         }
 
-                        this._children[i].insert(k);
+                        this._children[i].insert(key);
                     }
                 }
+
+                this._children[this._children.length - 1].insert(key);
             }
         }
     }
