@@ -281,6 +281,10 @@ export namespace DataStructures {
                 this._comparator = comparator;
             }
 
+            get rootNode(): BNode<K> {
+                return this._root;
+            }
+
             private replaceRoot(newRoot: BNode<K>) {
                 // Delete references so that nodes can be garbage-collected.
                 // idk if this actually helps, but better safe than sorry.
