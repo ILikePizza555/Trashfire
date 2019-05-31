@@ -273,13 +273,13 @@ export namespace DataStructures {
             }
         }
         export class BTree<K> {
-            private _root: Node<K>;
+            private _root: BNode<K>;
             private _comparator: Comparator<K>;
 
-        constructor(initalKey: K, comparator: Comparator<K> = defaultComparator) {
-            this._root = new Node<K>([initalKey]);
-            this._comparator = comparator;
-        }
+            constructor(initalKey: K, comparator: Comparator<K> = defaultComparator) {
+                this._root = new BNode<K>([initalKey]);
+                this._comparator = comparator;
+            }
 
         private fixOrder(beginningNode: Node<K>): void {
             // Assert that the length of the children is either 0 or 1 more than the number of keys
