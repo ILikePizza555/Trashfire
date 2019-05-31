@@ -20,6 +20,7 @@
     "webpack-dev-server": "^3.4.1"
   },
   "scripts": {
-    "dev-server": "webpack-dev-server -d --hot"
+    "dev-server": "webpack-dev-server -d --hot",
+    "tests": "mocha -r ts-node/register ./Test_*.ts"
   }
 }
