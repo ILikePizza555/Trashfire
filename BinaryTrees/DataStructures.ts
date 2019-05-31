@@ -262,14 +262,14 @@ export namespace DataStructures {
             /**
             * Inserts a key into the key array, keeping it sorted.
             */
-            insertKey(key: K, comparator: Comparator<K>) {
+            insertKey(key: K, comparator: Comparator<K>): number {
                 for (let i = 0; i < keys.length - 1; i++) {
                     if (comparator(key, this._keys[i]) <= 0) {
                         this._keys.splice(i, 0, key);
-                        return;
+                        return i ;
                     }
                 }
-                this._keys.push(key);
+                return this._keys.push(key) - 1;
             }
         }
         export class BTree<K> {
