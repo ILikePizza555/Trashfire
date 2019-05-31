@@ -292,7 +292,7 @@ export namespace DataStructures {
 
             private fixOrder(n: BNode<K>): void {
                 // Assert that the length of the children is either 0 or 1 more than the number of keys
-                if (n._children.length != 0 || n._children.length != n._keys.length + 1) {
+                if (n._children.length != 0 && n._children.length != n._keys.length + 1) {
                     throw new Error(`Invalid Node State: keys:${n._keys.length}, children:${n._children.length}`);
                 }
 
