@@ -234,76 +234,94 @@ export namespace DataStructures {
 
     }
 
-    class BTree<K> {
-        private _keys: K[];
-        private _children: BTree<K>[];
-        private _parent?: BTree<K>;
-        private _comparator: Comparator<K>;
+    export namespace BTree {
+        class Node<K> {
+            private _keys: K[];
+            private _children: BTree<K>[];
+            private _parent?: BTree<K>;
 
-        constructor(keys: K[] = [], children: BTree<K>[] = [], parent?: BTree<K>, comparator: Comparator<K> = defaultComparator) {
-            this._keys = keys;
-            this._children = children;
-            this._parent = parent;
+            constructor(keys: K[] = [], children: BTree<K>[] = [], parent?: BTree<K>, comparator: Comparator<K> = defaultComparator) {
+                this._keys = keys;
+                this._children = children;
+                this._parent = parent;
+            }
+
+            /**
+            * Inserts a key into the key array, keeping it sorted.
+            */
+            insertKey(key: K, comparator: Comparator<K>) {
+                for (let i = 0; i < keys.length - 1; i++) {
+                    if (comparator(key, this._keys[i]) <= 0) {
+                        this._keys.splice(i, 0, key);
+                        return;
+                    }
+                }
+                this._keys.push(key);
+            }
+        }
+        export class BTree<K> {
+            private _root: Node<K>;
+            private _comparator: Comparator<K>;
+
+        constructor(initalKey: K, comparator: Comparator<K> = defaultComparator) {
+            this._root = new Node<K>([initalKey]);
             this._comparator = comparator;
         }
 
-        private insertKey(key: K) {
-
-        }
-
-        private fixOrder(): BTree<K> | undefined {
+        private fixOrder(beginningNode: Node<K>): void {
             // Assert that the length of the children is either 0 or 1 more than the number of keys
             if(this._children.length != 0 || this._children.length != this._keys.length + 1) {
                 throw new Error(`Invalid State: keys:${this._keys.length}, children:${this._children.length}`);
             }
 
-            // Nothing to fix!
-            if(this._keys.length <= 2) {
-                return;
-            }
-
-            if(this._keys.length == 3) {
-                // First we need to break ourselves apart
-                const pushKey = this._keys[1];
-                const leftNode = new BTree<K>([this._keys[0]], this._children.slice(0, 2), this._parent, this._comparator);
-                const rightNode = new BTree<K>([this._keys[1]], this._children.slice(2, 4), this._parent, this._comparator);
-
-                if(!this._parent) {
-                    // Create a new parent, this is the new root;
-                    const parent = new BTree<K>([pushKey], [leftNode, rightNode], undefined, this._comparator);
-                    leftNode._parent = parent;
-                    rightNode._parent = parent
-                    return parent;
-                } else {
-
+                // Nothing to fix!
+                if (this._keys.length <= 2) {
+                    return;
                 }
-            }
-        }
 
-        isLeaf(): boolean {
-            return this._children.length == 0;
-        }
+                if (this._keys.length == 3) {
+                    // First we need to break ourselves apart
+                    const pushKey = this._keys[1];
+                    const leftNode = new BTree<K>([this._keys[0]], this._children.slice(0, 2), this._parent, this._comparator);
+                    const rightNode = new BTree<K>([this._keys[1]], this._children.slice(2, 4), this._parent, this._comparator);
 
-        insert(key: K): void {
-            if(this.isLeaf()) {
-                this._keys.push(key);
-                this._keys.sort(this._comparator);
-                this.fixOrder();
-            } else {
-                // Iterate through the keys to find the correct child to insert to.
-                for(let i = 0; i < this._keys.length - 1; i += 1) {
-                    const k = this._keys[i];
+                    if (!this._parent) {
+                        // Create a new parent, this is the new root;
+                        const parent = new BTree<K>([pushKey], [leftNode, rightNode], undefined, this._comparator);
+                        leftNode._parent = parent;
+                        rightNode._parent = parent
+                        return parent;
+                    } else {
 
-                    if(this._comparator(key, k) <= 0) {
-                        if(this._children[i] == undefined) {
-                            throw new Error(`Invalid State: _children[${i}] is undefined. Either this node has too many keys or not enough children. keys: ${this._keys.length}; children: ${this._children.length}`)
-                        }
-
-                        this._children[i].insert(key);
                     }
                 }
+            }
 
-                this._children[this._children.length - 1].insert(key);
+            isLeaf(): boolean {
+                return this._children.length == 0;
+            }
+
+            insert(key: K): void {
+                if (this.isLeaf()) {
+                    this._keys.push(key);
+                    this._keys.sort(this._comparator);
+                    this.fixOrder();
+                } else {
+                    // Iterate through the keys to find the correct child to insert to.
+                    for (let i = 0; i < this._keys.length - 1; i += 1) {
+                        const k = this._keys[i];
+
+                        if (this._comparator(key, k) <= 0) {
+                            if (this._children[i] == undefined) {
+                                throw new Error(`Invalid State: _children[${i}] is undefined. Either this node has too many keys or not enough children. keys: ${this._keys.length}; children: ${this._children.length}`)
+                            }
+
+                            this._children[i].insert(key);
+                        }
+                    }
+
+                    this._children[this._children.length - 1].insert(key);
+                }
             }
         }
     }
