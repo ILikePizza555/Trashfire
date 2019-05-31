@@ -1,6 +1,3 @@
-import { namespace, keys, thresholdFreedmanDiaconis } from "d3";
-import { AssertionError } from "assert";
-
 export type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
 export function defaultComparator(a: any, b: any): -1 | 0 | 1{
@@ -263,7 +260,7 @@ export namespace DataStructures {
             * Inserts a key into the key array, keeping it sorted.
             */
             insertKey(key: K, comparator: Comparator<K>): number {
-                for (let i = 0; i < keys.length - 1; i++) {
+                for (let i = 0; i < this._keys.length - 1; i++) {
                     if (comparator(key, this._keys[i]) <= 0) {
                         this._keys.splice(i, 0, key);
                         return i ;
