@@ -235,15 +235,28 @@ export namespace DataStructures {
     }
 
     export namespace BTree {
-        class Node<K> {
-            private _keys: K[];
-            private _children: BTree<K>[];
-            private _parent?: BTree<K>;
+        class BNode<K> {
+            _keys: K[];
+            _children: BNode<K>[];
+            _parent?: BNode<K>;
 
-            constructor(keys: K[] = [], children: BTree<K>[] = [], parent?: BTree<K>, comparator: Comparator<K> = defaultComparator) {
+            constructor(keys: K[] = [], children: BNode<K>[] = [], parent?: BNode<K>) {
                 this._keys = keys;
                 this._children = children;
                 this._parent = parent;
+            }
+            isLeaf(): boolean {
+                return this._children.length == 0;
+            }
+
+            removeChild(n: BNode<K>) {
+                const index = this._children.indexOf(n);
+
+                if(index == -1) {
+                    throw Error("Invalid child.");
+                }
+
+                this._children.splice(index, 1);
             }
 
             /**
