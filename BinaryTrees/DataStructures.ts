@@ -333,7 +333,10 @@ export namespace DataStructures {
 
                         if(this._comparator(key, k) <= 0) {
                             if (n._children[i] == undefined) {
-                                throw new Error(`Invalid State: _children[${i}] is undefined. Either this node has too many keys or not enough children. keys: ${this._keys.length}; children: ${this._children.length}`)
+                                throw new Error(`
+                                Invalid State: _children[${i}] is undefined. 
+                                Either this node has too many keys or not enough children. 
+                                keys: ${n._keys.length}; children: ${n._children.length}`);
                             }
                             n = n._children[i];
                         }
